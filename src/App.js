@@ -1,10 +1,12 @@
-import './components/sass/style.scss';
-import './App.css';
+import './App.scss';
+
+
+import Nav from './components/Nav';
 
 function App() {
   return (
     <div className="App">
-      <header>Pokedex!</header>
+      <Nav />
     </div>
   );
 }
