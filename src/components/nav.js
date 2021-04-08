@@ -20,22 +20,10 @@ render() {
                     <div className="navbar-end">
                         <a className="navbar-item is-active" href="#home">
                             Home
-      </a>
+                        </a>
                         <a className="navbar-item" href="#home">
-                            Examples
-      </a>
-                        <a className="navbar-item" href="#home">
-                            Features
-      </a>
-                        <a className="navbar-item" href="#home">
-                            Team
-      </a>
-                        <a className="navbar-item" href="#home">
-                            Archives
-      </a>
-                        <a className="navbar-item" href="#home">
-                            Help
-      </a>
+                            Pokédex
+                        </a>
                     </div>
                 </div>
             </div>

@@ -1,2 +1,10 @@
 @import '../node_modules/bulma/bulma.sass';
 @import './components/Sass/nav.scss';
+span {
+    display: block;
+}
+
+.footer p,
+strong {
+    color: red;
+}
