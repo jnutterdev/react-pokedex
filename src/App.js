@@ -5,6 +5,7 @@ import Nav from './components/Nav';
 // import Search from './components/Search';
 
 const App = () => {
+
     const stories = [
       {
         title: 'React Pokédex',
@@ -24,7 +25,13 @@ const App = () => {
       },
     ];
 
-  const [searchTerm, setSearchTerm] = useState('React');
+  const [searchTerm, setSearchTerm] = useState(
+    localStorage.getItem('search') || 'React'
+  );
+
+  React.useEffect(() => {
+    localStorage.setItem('search', searchTerm); 
+  }, [searchTerm]);
 
   const handleSearch = event => {
     setSearchTerm(event.target.value);
@@ -61,22 +68,20 @@ const Search = ({search, onSearch}) => (
   );
 
 
-const List = ({list}) => 
-  list.map(item => <Item key={item.objectID} item={item} />);
-    
-    const Item = ({item}) => (
-        <div>
-          <span>
-            <a href={item.url}>{item.title}</a>
-          </span>
-          <span>{item.author}</span>
-          <span>{item.num_comments}</span>
-          <span>{item.points}</span>
-        </div>
-    );
+const List = ({ list }) => list.map(item => <Item key={item.objectID} item={item} />);
+
+const Item = ({ item }) => (
+  <div>
+    <span>
+      <a href={item.url}>{item.title}</a>
+    </span>
+    <span>{item.author}</span>
+    <span>{item.num_comments}</span>
+    <span>{item.points}</span>
+  </div>
+);
 
 
-  
 
 
 export default App;
