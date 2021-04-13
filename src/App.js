@@ -1,4 +1,4 @@
-import React, {useState} from 'react'; 
+import React, {useState, useEffect} from 'react'; 
 import './App.scss';
 
 import Nav from './components/Nav';
@@ -29,7 +29,7 @@ const App = () => {
     localStorage.getItem('search') || 'React'
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem('search', searchTerm); 
   }, [searchTerm]);
 
