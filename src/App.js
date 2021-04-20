@@ -1,43 +1,92 @@
-import React, {useState, useEffect} from 'react'; 
+import React, {useState, useEffect, useReducer, useRef} from 'react'; 
 import './App.scss';
 
 import Nav from './components/Nav';
 // import Search from './components/Search';
 
-const App = () => {
+const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
-    const stories = [
-      {
-        title: 'React Pokédex',
-        url: 'https://pokeapi.co/docs/v2',
-        author: 'John',
-        num_comments: 3,
-        points: 4, 
-        objectID: 0,
-      },
-      {
-        title: 'Rails Pokédex',
-        url: 'https://pokeapi.co/docs/v2',
-        author: 'John',
-        num_comments: 1,
-        points: 1, 
-        objectID: 1,
-      },
-    ];
-
-  const [searchTerm, setSearchTerm] = useState(
-    localStorage.getItem('search') || 'React'
+const useSemiPersistentState = (key, initialState) => {
+  const [value, setValue] = useState(
+    localStorage.getItem(key) || initialState
   );
 
   useEffect(() => {
-    localStorage.setItem('search', searchTerm); 
-  }, [searchTerm]);
+    localStorage.setItem(key, value);
+  }, [value, key]);
+  
+  return [value, setValue];
+};
+
+const storiesReducer = (state, action) => {
+  switch (action.type) {
+    case 'STORIES_FETCH_INIT':
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+      };
+      case 'STORIES_FETCH_SUCCESS':
+        return {
+          ...state,
+          isLoading: false,
+          isError: false,
+          data: action.payload,
+        };
+        case 'STORIES_FETCH_FAILURE':
+          return {
+            ...state,
+            data: state.data.filter(
+              story => action.payload.objectID !== story.objectID
+            ),
+          };
+          default: 
+          throw new Error();
+  }
+};
+
+const App = () => {
+
+
+  const [searchTerm, setSearchTerm] = useSemiPersistentState(
+    'search',
+    'react'
+  );
+
+  const [stories, dispatchStories] = useReducer(
+    storiesReducer,
+    { data: [],  isLoading: false, isError: false}
+  );
+
+  useEffect(() => {
+    dispatchStories({ type: 'STORIES_FETCH_INIT' }); 
+
+    fetch(`${API_ENDPOINT}react`)
+    .then(response => response.json())
+    .then(result => {
+      dispatchStories({
+        type: 'STORIES_FETCH_SUCCESS',
+        payload: result.hits,
+      });
+    })
+    .catch(() => 
+    dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
+    );
+  },  []);
+
+
+  const handleRemoveStory = item =>  {
+    dispatchStories({
+      type: 'REMOVE_STORY',
+      payload: item,
+    });
+  };
 
   const handleSearch = event => {
     setSearchTerm(event.target.value);
   };
 
-  const searchedStories = stories.filter(story => 
+  const searchedStories = stories.data.filter(story => 
       story.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -45,43 +94,83 @@ const App = () => {
     <div className="App">
       <Nav />
         <div className="container">
-          <Search search={searchTerm} onSearch={handleSearch} />
+          <InputWithLabel
+          id="search"
+          value={searchTerm}
+          isFocused
+          onInputChange={handleSearch}
+          >
+            <strong>Search: </strong>
+            </InputWithLabel>
           <hr/>
-          <List list={searchedStories} />
-        </div>
-    </div>
-  );
-};
+          {stories.isError && <p>Something went wrong...</p>}
 
-const Search = ({search, onSearch}) => (
- 
-      <div>
-          <label htmlFor="search">Search:
-          </label>
-          <input 
-          id="search" 
-          type="text" 
-          value={search} 
-          onChange={onSearch}
-          />
-      </div>
-  );
+          {stories.isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            <List 
+            list={searchedStories} 
+            onRemoveItem={handleRemoveStory}
+            />
+          )}
+          </div>
+          </div>
+          );
+       };
 
+       const InputWithLabel = ({
+         id, 
+         value,
+         type = 'text',
+         onInputChange,
+         isFocused,
+         children,
+       }) => {
+         const inputRef = useRef();
 
-const List = ({ list }) => list.map(item => <Item key={item.objectID} item={item} />);
+         useEffect(() => {
+           if (isFocused) {
+             inputRef.current.focus();
+           }
+         }, [isFocused]);
 
-const Item = ({ item }) => (
+         return (
+           <>
+            <label htmlFor={id}>{children}</label>
+            &nbsp;
+            <input 
+            ref={inputRef}
+            id={id}
+            type={type}
+            value={value}
+            onChange={onInputChange}
+            />
+           </>
+         );
+       };
+
+const List = ({ list, onRemoveItem }) => 
+list.map(item =>(
+<Item key={item.objectID} 
+item={item} 
+onRemoveItem={onRemoveItem}
+/>
+));
+
+const Item = ({ item, onRemoveItem }) => (
   <div>
     <span>
       <a href={item.url}>{item.title}</a>
     </span>
-    <span>{item.author}</span>
+    <span>{item.name}</span>
     <span>{item.num_comments}</span>
     <span>{item.points}</span>
+    <span>
+      <button type="button" onClick={() => onRemoveItem(item)}>
+        Dismiss
+      </button>
+    </span>
   </div>
 );
-
-
-
 
 export default App;
