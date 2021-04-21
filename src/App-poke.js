@@ -4,7 +4,7 @@ import './App.scss';
 import Nav from './components/Nav';
 // import Search from './components/Search';
 
-const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
+const API_ENDPOINT = 'https://pokeapi.co/api/v2/pokemon/';
 
 const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = useState(
@@ -50,7 +50,7 @@ const App = () => {
 
   const [searchTerm, setSearchTerm] = useSemiPersistentState(
     'search',
-    'react'
+    'charmander',
   );
 
   const [stories, dispatchStories] = useReducer(
@@ -68,7 +68,7 @@ const App = () => {
     .then(result => {
       dispatchStories({
         type: 'STORIES_FETCH_SUCCESS',
-        payload: result.hits,
+        payload: Object.values(result),
       });
     })
     .catch(() => 
@@ -112,7 +112,7 @@ const App = () => {
             onRemoveItem={handleRemoveStory}
             />
           )}
-          </div>
+            </div>
           </div>
           );
        };
@@ -148,6 +148,7 @@ const App = () => {
          );
        };
 
+
 const List = ({ list, onRemoveItem }) => 
 list.map(item =>(
 <Item key={item.objectID} 
@@ -159,11 +160,8 @@ onRemoveItem={onRemoveItem}
 const Item = ({ item, onRemoveItem }) => (
   <div>
     <span>
-      <a href={item.url}>{item.title}</a>
+      <a href={item.url}>{item.name}</a>
     </span>
-    <span>{item.name}</span>
-    <span>{item.num_comments}</span>
-    <span>{item.points}</span>
     <span>
       <button type="button" onClick={() => onRemoveItem(item)}>
         Dismiss
