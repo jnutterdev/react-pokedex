@@ -4,6 +4,7 @@ import {useState} from "react"; // sets the variable display and function to set
 function Dropdown(props) {
 
     const [ display, setDisplay ] = useState('none');
+    const [ count, setCount ] = useState(0);
 
     function handleClick() {
         if ( display === 'none') {
@@ -21,7 +22,7 @@ function Dropdown(props) {
                 Select your pokémon:
             </button>
 
-            <div className="my-2" style={{ display: display }}>
+            <div style={{ display: display }}>
                 { props.children }
             </div>
         </div>
