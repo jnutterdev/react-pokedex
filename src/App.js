@@ -1,5 +1,7 @@
 import React from 'react';
 import Logo from "./components/Images/pokedex.png";
+import { Dropdown } from './components/Dropdown';
+import { Element } from './components/Element';
 
 import Button from "./components/Button";
 
@@ -7,11 +9,16 @@ function App() {
  
   return (
 
-  <div>
+  <div className="container sm-auto px-6">
     <img src={Logo} alt="Pokédex" />
-    <h1>Pokédex</h1>
+
+    <Dropdown>
+      <Element />
+    </Dropdown>
+
     <Button />
-  </div>
+
+  </div> 
   
   )
 }
