@@ -15,17 +15,17 @@ function Tooltip({ children, tooltipText }) {
     }
     return (
         <div
-            className="relative flex tiems-center"
-            onMouseEnter={handleMouseEnter}
+            className="relative inline-flex items-center "
+            onClick={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
             <div
-                className="absolute whitespace-no-wrap bg-gradient-to-r from-black to-gray-700 text-white px-4 py-2 rounded flex items-center transition-all duration-150"
+                className="absolute whitespace-nowrap bg-gradient-to-r bg-teal-200 to-gray-700 text-gray-900 px-4 py-2 rounded flex items-center transition-all duration-150 ml-3"
                 style={{ left: "100%", opacity: 0 }}
                 ref={tipRef}
             >
                 <div
-                    className="bg-black h-3 w-3 absolute"
+                    className="bg-teal-200 h-3 w-3 absolute"
                     style={{ left: "-6px", transform: "rotate(45deg)" }}
                 />
             {tooltipText}

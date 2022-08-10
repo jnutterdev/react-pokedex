@@ -5,7 +5,7 @@ import { Element } from './components/Element';
 
 import Button from "./components/Button";
 
-function App() {
+function App(props) {
  
   return (
 
@@ -17,7 +17,10 @@ function App() {
     </Dropdown>
 
     <Button />
-
+    <div>
+      <h1>Your selected Pokémon is:</h1>
+      <p></p>  
+    </div>    
   </div> 
   
   )

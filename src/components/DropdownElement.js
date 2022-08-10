@@ -5,15 +5,10 @@ function Element( props ) {
     return (
 
         <div>
-
             <div>
-
                 { content }
-
             </div>
-
-        </div>
-
+        </div>  
     )
 
 }

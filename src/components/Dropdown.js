@@ -3,28 +3,10 @@ import {useState} from "react"; // sets the variable display and function to set
 
 function Dropdown(props) {
 
-    const [ display, setDisplay ] = useState('none');
-    const [ count, setCount ] = useState(0);
-
-    function handleClick() {
-        if ( display === 'none') {
-            setDisplay('block')
-        } else {
-            setDisplay('none')
-        }
-    }
     return (
         <div>
-            <button 
-                className="my-6 bg-blue-300 p-3 rounded-md"
-                onClick={handleClick}
-                >
-                Select your pokémon:
-            </button>
-
-            <div style={{ display: display }}>
-                { props.children }
-            </div>
+            <h1 className="my-6 bg-blue-300 p-3 rounded-md"> Select your pokémon:</h1>
+            <div>{ props.children }</div>
         </div>
     )
 }
