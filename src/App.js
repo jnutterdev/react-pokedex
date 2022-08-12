@@ -1,7 +1,10 @@
 import React from 'react';
 import Logo from "./components/Images/pokedex.png";
+import StarRating from './components/StarRating';
+
 import { Dropdown } from './components/Dropdown';
 import { Element } from './components/Element';
+
 
 import Button from "./components/Button";
 
@@ -16,6 +19,11 @@ function App(props) {
       <Element />
     </Dropdown>
 
+    <StarRating 
+    className="flex"
+    style={{ backgroundColor: 'lightblue' }}
+    onDoubleClick={e => alert("double click")} 
+    />
     <Button />
     <div>
       <h1>Your selected Pokémon is:</h1>
